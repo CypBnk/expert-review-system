@@ -14,6 +14,29 @@ This folder contains everything needed to run the Expert Review Analysis System 
 - Docker 20.10 or higher
 - Docker Compose (optional, for easier management)
 
+## 🖥️ System Requirements (Docker)
+
+Minimum:
+
+- **CPU:** 2 vCPUs
+- **RAM:** 4 GB
+- **Storage:** 15 GB free (image + model cache + logs)
+- **Network:** Outbound access to review platforms (IMDb, Steam, Metacritic)
+
+Recommended:
+
+- **CPU:** 4+ cores
+- **RAM:** 8–16 GB
+- **Storage:** 25 GB free (room for additional models & build layers)
+- **GPU:** Not required (CPU inference); optional for future acceleration
+- **Disk:** SSD/NVMe preferred for faster model load & container layer extraction
+
+Notes:
+
+- First run performs model cache population; subsequent runs are faster.
+- Leave headroom (~2–3 GB) beyond image size to avoid build failures.
+- For multiple containers add ~2 GB RAM per extra instance.
+
 ## 🚀 Quick Start
 
 ### Prerequisites Check
@@ -322,3 +345,15 @@ docker run -e LOG_LEVEL=DEBUG expert-review-system:latest
 - [Docker Best Practices](https://docs.docker.com/develop/dev-best-practices/)
 - [Docker Compose Documentation](https://docs.docker.com/compose/)
 - [Production Deployment Guide](../docs/PRODUCTION.md)
+
+## 🛠️ Development Hardware (Reference)
+
+Example environment used during development of v2.2.0:
+
+- **CPU:** 8-core desktop (e.g., AMD Ryzen 7 / Intel i7)
+- **RAM:** 32 GB
+- **GPU:** None (CPU-only inference for BERT sentiment)
+- **Storage:** 1 TB NVMe SSD (≥20 GB free for Docker builds & pruning)
+- **OS:** Windows 11 + Docker Desktop (WSL2 backend)
+
+Adjust with your actual specs if contributing—section intended for transparency & expectation setting.

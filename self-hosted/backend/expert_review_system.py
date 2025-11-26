@@ -76,6 +76,7 @@ class AnalysisResult:
     confidence: float
     analysis_id: str
     timestamp: str
+    evaluation: Optional[Dict[str, str]] = None
 
 
 class RateLimiter:
@@ -154,29 +155,120 @@ class InputValidator:
 
 
 class BERTSentimentAnalyzer:
-    """Sentiment analysis using BERT (mock implementation for now)"""
+    """Sentiment analysis using BERT model for real predictions"""
     
     def __init__(self, model_name: Optional[str] = None):
         self.model_name = model_name or Config.MODEL_NAME
         logger.info(f"Initializing BERT sentiment analyzer with model: {self.model_name}")
-        # In production, load actual model here
-        # self.tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=Config.MODEL_CACHE_DIR)
-        # self.model = AutoModelForSequenceClassification.from_pretrained(model_name, cache_dir=Config.MODEL_CACHE_DIR)
+        
+        try:
+            from transformers import AutoTokenizer, AutoModelForSequenceClassification
+            import torch
+            
+            # Load model and tokenizer
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                self.model_name, 
+                cache_dir=Config.MODEL_CACHE_DIR
+            )
+            self.model = AutoModelForSequenceClassification.from_pretrained(
+                self.model_name, 
+                cache_dir=Config.MODEL_CACHE_DIR
+            )
+            
+            # Set device (CPU for now, GPU support can be added)
+            self.device = torch.device('cpu')
+            self.model.to(self.device)
+            self.model.eval()
+            
+            logger.info(f"✓ BERT model loaded successfully: {self.model_name}")
+            
+        except ImportError as e:
+            logger.error(f"Failed to import transformers/torch: {str(e)}")
+            logger.warning("Falling back to mock sentiment analysis")
+            self.model = None
+            self.tokenizer = None
+        except Exception as e:
+            logger.error(f"Failed to load BERT model: {str(e)}")
+            logger.warning("Falling back to mock sentiment analysis")
+            self.model = None
+            self.tokenizer = None
     
     def analyze_batch(self, reviews: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Analyze sentiment for batch of reviews"""
+        """Analyze sentiment for batch of reviews using BERT
+        
+        Returns list of dicts with 'score' (1-5), 'confidence', and 'text' keys
+        """
         try:
             sentiments = []
+            
+            # Fallback to mock if model not loaded
+            if self.model is None or self.tokenizer is None:
+                logger.warning("Using mock sentiment data (model not loaded)")
+                for review in reviews:
+                    mock_score = np.random.randint(1, 6)
+                    sentiments.append({
+                        'review_id': review.get('id', ''),
+                        'score': mock_score,
+                        'confidence': np.random.uniform(0.7, 0.99),
+                        'text': review.get('text', '')[:100]
+                    })
+                return sentiments
+            
+            import torch
+            
+            # Process each review
             for review in reviews:
-                # Mock implementation - replace with actual BERT inference
-                mock_score = np.random.randint(1, 6)
-                sentiments.append({
-                    'review_id': review.get('id', ''),
-                    'predicted_score': mock_score,
-                    'confidence': np.random.uniform(0.7, 0.99),
-                    'original_score': review.get('rating')
-                })
+                text = review.get('text', '')
+                if not text or len(text.strip()) < 5:
+                    sentiments.append({
+                        'review_id': review.get('id', ''),
+                        'score': 3,  # Neutral for empty/short text
+                        'confidence': 0.5,
+                        'text': text[:100]
+                    })
+                    continue
+                
+                try:
+                    # Tokenize (truncate to 512 tokens max)
+                    inputs = self.tokenizer(
+                        text,
+                        return_tensors='pt',
+                        truncation=True,
+                        max_length=512,
+                        padding=True
+                    ).to(self.device)
+                    
+                    # Run inference
+                    with torch.no_grad():
+                        outputs = self.model(**inputs)
+                        logits = outputs.logits
+                        probs = torch.softmax(logits, dim=1)
+                        predicted_class = torch.argmax(probs, dim=1).item()
+                        confidence = probs[0][predicted_class].item()
+                    
+                    # Convert to 1-5 star scale (model outputs 0-4)
+                    score = predicted_class + 1
+                    
+                    sentiments.append({
+                        'review_id': review.get('id', ''),
+                        'score': score,
+                        'confidence': confidence,
+                        'text': text[:100]
+                    })
+                    
+                except Exception as e:
+                    logger.warning(f"BERT inference failed for review: {str(e)}")
+                    # Fallback to neutral
+                    sentiments.append({
+                        'review_id': review.get('id', ''),
+                        'score': 3,
+                        'confidence': 0.5,
+                        'text': text[:100]
+                    })
+            
+            logger.info(f"✓ Analyzed {len(sentiments)} reviews with BERT")
             return sentiments
+            
         except Exception as e:
             logger.error(f"Error in sentiment analysis: {str(e)}")
             raise
@@ -331,9 +423,9 @@ class CrossMediaMatcher:
             if not sentiment:
                 return 0.5
             
-            # Calculate average predicted score
-            avg_score = np.mean([s['predicted_score'] for s in sentiment])
-            # Normalize to 0-1 range (assuming 1-5 scale)
+            # Calculate average score from BERT predictions (1-5 scale)
+            avg_score = np.mean([s.get('score', 3) for s in sentiment])
+            # Normalize to 0-1 range (1-5 scale)
             return (avg_score - 1) / 4
             
         except Exception as e:
@@ -838,6 +930,54 @@ class ExpertReviewAnalyst:
             logger.error(f"Error summarizing reviews: {str(e)}")
             return f"Analysis complete based on {len(reviews)} reviews"
     
+    def _calculate_sentiment_summary(self, sentiment_scores: List[Dict[str, Any]]) -> Dict[str, int]:
+        """Calculate sentiment summary percentages from BERT predictions
+        
+        Args:
+            sentiment_scores: List of sentiment prediction dicts from BERT analyzer
+            
+        Returns:
+            Dict with positive, neutral, negative percentages (sum = 100)
+        """
+        try:
+            if not sentiment_scores:
+                return {'positive': 0, 'neutral': 0, 'negative': 0}
+            
+            # Count sentiment categories based on score (1-5 star scale)
+            # 1-2 stars = negative, 3 stars = neutral, 4-5 stars = positive
+            positive_count = sum(1 for s in sentiment_scores if s['score'] >= 4)
+            neutral_count = sum(1 for s in sentiment_scores if s['score'] == 3)
+            negative_count = sum(1 for s in sentiment_scores if s['score'] <= 2)
+            
+            total = len(sentiment_scores)
+            
+            # Calculate percentages
+            positive_pct = round((positive_count / total) * 100)
+            neutral_pct = round((neutral_count / total) * 100)
+            negative_pct = round((negative_count / total) * 100)
+            
+            # Adjust for rounding errors to ensure sum = 100
+            total_pct = positive_pct + neutral_pct + negative_pct
+            if total_pct != 100:
+                # Add/subtract difference to the largest category
+                diff = 100 - total_pct
+                if positive_pct >= neutral_pct and positive_pct >= negative_pct:
+                    positive_pct += diff
+                elif neutral_pct >= negative_pct:
+                    neutral_pct += diff
+                else:
+                    negative_pct += diff
+            
+            return {
+                'positive': positive_pct,
+                'neutral': neutral_pct,
+                'negative': negative_pct
+            }
+            
+        except Exception as e:
+            logger.error(f"Error calculating sentiment summary: {str(e)}")
+            return {'positive': 0, 'neutral': 0, 'negative': 0}
+    
     def generate_recommendation(self, compatibility_score: float) -> Dict[str, str]:
         """Generate recommendation based on compatibility score"""
         try:
@@ -914,17 +1054,29 @@ class ExpertReviewAnalyst:
             # Step 6: Generate recommendation
             recommendation = self.generate_recommendation(compatibility_score)
             
+            # Calculate sentiment summary from real BERT predictions
+            sentiment_summary = self._calculate_sentiment_summary(sentiment_scores)
+            
+            # Determine evaluation mode
+            if getattr(self.sentiment_model, 'model', None) is not None:
+                evaluation = {
+                    'mode': 'bert',
+                    'model': getattr(self.sentiment_model, 'model_name', 'unknown')
+                }
+            else:
+                evaluation = {
+                    'mode': 'mock',
+                    'model': 'random'
+                }
+
             # Create result object
             result = AnalysisResult(
                 title=title_info.name,
                 recommendation=recommendation['likelihood'],
                 compatibility_score=compatibility_score,
                 theme_alignment=themes,
-                sentiment_summary={
-                    'positive': np.random.randint(40, 80),
-                    'neutral': np.random.randint(10, 30),
-                    'negative': np.random.randint(5, 20)
-                },
+                sentiment_summary=sentiment_summary,
+                evaluation=evaluation,
                 matching_titles=["Title 1", "Title 2", "Title 3"],
                 confidence=float(recommendation['confidence'].rstrip('%')) / 100,
                 analysis_id=f"analysis_{int(time.time())}",

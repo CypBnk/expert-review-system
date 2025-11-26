@@ -38,8 +38,8 @@ services:
     volumes:
       # Persistent data storage for user preferences
       - ./data:/app/data
-      # Model cache (optional - speeds up startup)
-      - ./models:/app/models
+      # Note: Model cache is baked into the Docker image (669MB BERT model pre-downloaded)
+      # Removed volume mount to use pre-downloaded model from image
 
     restart: unless-stopped
 
@@ -54,11 +54,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "2"
-          memory: 2G
+          cpus: "4"
+          memory: 4G
         reservations:
-          cpus: "0.5"
-          memory: 512M
+          cpus: "1"
+          memory: 1G
 
 # Optional: Use networks for better isolation
 networks:

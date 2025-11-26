@@ -322,6 +322,49 @@ cd self-hosted
 
 ---
 
+## 🖥️ System Requirements (Docker)
+
+These guidelines reflect observed resource usage (PyTorch + Transformers + scraping) for version 2.2.0.
+
+Minimum (functional):
+
+- **CPU:** 2 vCPUs (x86_64)
+- **RAM:** 4 GB (may experience slow BERT inference / risk of OOM under load)
+- **Storage:** 15 GB free (≈13 GB image + model cache + logs + preferences)
+- **Network:** Stable outbound access to IMDb / Steam / Metacritic
+
+Recommended (comfortable):
+
+- **CPU:** 4+ cores (improves parallel scraping and JSON serialization)
+- **RAM:** 8–16 GB (room for future model upgrades & multiple analyses)
+- **Storage:** 25 GB free (space for additional HF models, build cache)
+- **GPU:** Not required (current build runs CPU inference); optional CUDA GPU for future acceleration
+- **File System:** SSD/NVMe for faster layer extraction & model load
+
+Operational Notes:
+
+- First container start pre-caches the model; subsequent starts reuse cached weights.
+- Keep at least 2–3 GB free above the image size to avoid OS level disk pressure during `docker build`.
+- If running multiple containers, allocate +2 GB RAM per additional instance.
+
+## 🛠️ Development Hardware (Reference)
+
+Baseline development environment used for implementing & validating v2.2.0 (provided for transparency – not a requirement):
+
+| Component | Specification                      | Notes                                                                     |
+| --------- | ---------------------------------- | ------------------------------------------------------------------------- |
+| CPU       | AMD Ryzen 9 5950X (16C / 32T)      | High parallel throughput for scraping & builds                            |
+| RAM       | 64 GB DDR4                         | Headroom for larger future NLP models                                     |
+| GPU       | NVIDIA RTX 3090 (24 GB VRAM)       | Currently unused (CPU inference); reserved for potential GPU acceleration |
+| Storage   | 4 TB NVMe SSD                      | ~20 GB transient free space for Docker layers & model cache               |
+| OS        | Windows 11 (Docker Desktop + WSL2) | Cross-tested on Linux (Ubuntu 22.04) for portability                      |
+
+Notes:
+
+- Current release performs sentiment inference on CPU; GPU is optional.
+- Specs exceed recommended requirements (see System Requirements) to allow profiling & experimentation.
+- Contributors can comfortably develop with the recommended tier in the System Requirements section.
+
 ## 📄 License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
@@ -354,8 +397,8 @@ Security is a priority. Please review our [Security Policy](SECURITY.md) for:
 
 ## 📊 Version History
 
-- **v2.1.1** (2025-11-26) - Frontend enhancements: dynamic loading states with spinners
 - **v2.2.0** (2025-11-26) - BERT sentiment, evaluation metadata, scoring & Docker stability
+- **v2.1.1** (2025-11-26) - Frontend enhancements: dynamic loading states with spinners
 - **v2.1.0** (2025-11-26) - Production backend with real scraping, filtering, Docker
 - **v2.0.0** (2025-11-25) - Security overhaul, backend integration, modular architecture
 - **v1.0.0** - Initial release with basic checklist functionality

@@ -238,7 +238,15 @@ class ExpertReviewApp {
       // Update result title (sanitized)
       const resultTitle = getElement("result-title");
       if (resultTitle) {
-        resultTitle.textContent = `Analysis: ${result.title}`;
+        let headerText = `Analysis: ${result.title}`;
+        if (result.evaluation && result.evaluation.mode) {
+          const modeLabel =
+            result.evaluation.mode === "bert"
+              ? "BERT-Sentiment Used"
+              : "Mock-Data Used";
+          headerText += ` [${modeLabel}]`;
+        }
+        resultTitle.textContent = headerText;
       }
 
       // Update UI components
