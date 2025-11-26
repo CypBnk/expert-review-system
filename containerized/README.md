@@ -1,0 +1,295 @@
+# Containerized Deployment (Docker)
+
+This folder contains everything needed to run the Expert Review Analysis System as a Docker container.
+
+## 📋 Prerequisites
+
+- Docker 20.10 or higher
+- Docker Compose (optional, for easier management)
+
+## 🚀 Quick Start
+
+### Option 1: Docker Run (Simple)
+
+```bash
+# Build the image
+docker build -t expert-review-system:latest .
+
+# Run the container
+docker run -d \
+  --name expert-review \
+  -p 5000:5000 \
+  -p 8000:8000 \
+  -v $(pwd)/data:/app/data \
+  expert-review-system:latest
+
+# Check logs
+docker logs expert-review
+
+# Stop container
+docker stop expert-review
+```
+
+### Option 2: Docker Compose (Recommended)
+
+```bash
+# Start services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
+## 🌐 Access Application
+
+Once running:
+
+- **Frontend**: http://localhost:8000
+- **API**: http://localhost:5000
+- **Health Check**: http://localhost:5000/api/health
+
+## 📁 File Structure
+
+```
+containerized/
+├── Dockerfile              # Container definition
+├── docker-compose.yml      # Compose configuration
+├── .env.example           # Environment template
+├── .dockerignore          # Build exclusions
+└── README.md              # This file
+```
+
+## 🔧 Configuration
+
+### Using Environment Variables
+
+Create a `.env` file from the example:
+
+```bash
+cp .env.example .env
+```
+
+Configure as needed:
+
+```env
+# Application
+PYTHON_PORT=5000
+FRONTEND_PORT=8000
+
+# ML Model
+MODEL_NAME=nlptown/bert-base-multilingual-uncased-sentiment
+
+# Thresholds
+HIGHLY_LIKELY_THRESHOLD=0.8
+WORTH_TRYING_THRESHOLD=0.6
+PROCEED_CAUTION_THRESHOLD=0.4
+
+# Rate Limiting
+RATE_LIMIT_MAX=100
+RATE_LIMIT_WINDOW=60
+
+# External APIs (Optional)
+IMDB_API_KEY=
+STEAM_API_KEY=
+METACRITIC_API_KEY=
+```
+
+### Using Docker Compose
+
+Edit `docker-compose.yml` to customize:
+
+- Port mappings
+- Volume mounts
+- Resource limits
+- Network configuration
+
+## 📊 Container Details
+
+### Image Information
+
+- **Base**: Python 3.11-slim
+- **Size**: ~1.2GB
+- **Architecture**: Multi-stage build
+- **Services**: Gunicorn (API) + Python HTTP Server (Frontend)
+
+### Exposed Ports
+
+- **5000**: Backend API (Gunicorn with 4 workers)
+- **8000**: Frontend (Python HTTP Server)
+
+### Persistent Data
+
+Mount a volume for persistent preferences:
+
+```bash
+-v /path/to/data:/app/data
+```
+
+## 🔒 Security Best Practices
+
+### Production Deployment
+
+1. **Use Secrets Management**
+
+   ```bash
+   # Use Docker secrets instead of environment variables
+   docker secret create imdb_api_key ./secrets/imdb_key.txt
+   ```
+
+2. **Enable HTTPS**
+
+   - Use a reverse proxy (Traefik, nginx, Caddy)
+   - Configure SSL certificates
+   - Redirect HTTP to HTTPS
+
+3. **Limit Resources**
+
+   ```yaml
+   deploy:
+     resources:
+       limits:
+         cpus: "2"
+         memory: 2G
+   ```
+
+4. **Network Isolation**
+
+   ```yaml
+   networks:
+     frontend:
+     backend:
+       internal: true
+   ```
+
+5. **Read-Only Filesystem**
+   ```bash
+   docker run --read-only \
+     --tmpfs /tmp \
+     -v /app/data \
+     expert-review-system:latest
+   ```
+
+## 🔍 Health Monitoring
+
+### Health Check
+
+```bash
+# Manual check
+curl http://localhost:5000/api/health
+
+# Docker health check (built-in)
+docker ps --format "table {{.Names}}\t{{.Status}}"
+```
+
+### Logs
+
+```bash
+# Follow logs
+docker logs -f expert-review
+
+# Last 100 lines
+docker logs --tail 100 expert-review
+
+# With timestamps
+docker logs -t expert-review
+```
+
+### Resource Usage
+
+```bash
+# Real-time stats
+docker stats expert-review
+
+# One-time check
+docker stats --no-stream expert-review
+```
+
+## 🐛 Troubleshooting
+
+### Container Won't Start
+
+```bash
+# Check logs
+docker logs expert-review
+
+# Inspect container
+docker inspect expert-review
+
+# Try interactive mode
+docker run -it expert-review-system:latest /bin/bash
+```
+
+### Port Conflicts
+
+```bash
+# Check what's using the port
+netstat -tuln | grep 5000
+
+# Change port mapping
+docker run -p 5001:5000 -p 8001:8000 expert-review-system:latest
+```
+
+### Out of Memory
+
+```bash
+# Increase memory limit
+docker run -m 4g expert-review-system:latest
+
+# Check memory usage
+docker stats --format "table {{.Name}}\t{{.MemUsage}}"
+```
+
+### Rebuild After Changes
+
+```bash
+# Rebuild without cache
+docker build --no-cache -t expert-review-system:latest .
+
+# Remove old images
+docker image prune -f
+```
+
+## 🚀 Advanced Usage
+
+### Multi-Stage Build Optimization
+
+The Dockerfile uses multi-stage builds to minimize image size:
+
+- Build dependencies installed separately
+- Only runtime files copied to final image
+- Cached layers for faster rebuilds
+
+### Horizontal Scaling
+
+Scale with multiple containers behind a load balancer:
+
+```bash
+# Docker Compose scaling
+docker-compose up -d --scale api=3
+
+# Kubernetes deployment
+kubectl apply -f k8s/deployment.yml
+kubectl scale deployment expert-review --replicas=3
+```
+
+### Custom Configurations
+
+Override the default command:
+
+```bash
+# More workers
+docker run expert-review-system:latest \
+  gunicorn -w 8 -b 0.0.0.0:5000 api_server:app
+
+# Different log level
+docker run -e LOG_LEVEL=DEBUG expert-review-system:latest
+```
+
+## 📚 Additional Resources
+
+- [Docker Best Practices](https://docs.docker.com/develop/dev-best-practices/)
+- [Docker Compose Documentation](https://docs.docker.com/compose/)
+- [Production Deployment Guide](../docs/PRODUCTION.md)

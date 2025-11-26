@@ -1,0 +1,94 @@
+MIT License
+
+Copyright (c) 2025 Expert Review Analysis System Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Third-Party Licenses
+
+This project uses the following open-source packages:
+
+### Python Dependencies
+
+- **Flask** - BSD-3-Clause License
+
+  - Copyright © 2010 by the Pallets team
+  - https://flask.palletsprojects.com/
+
+- **Flask-CORS** - MIT License
+
+  - Copyright © 2013 Cory Dolphin
+  - https://github.com/corydolphin/flask-cors
+
+- **pandas** - BSD-3-Clause License
+
+  - Copyright © 2008-2011, AQR Capital Management, LLC, Lambda Foundry, Inc.
+  - https://pandas.pydata.org/
+
+- **NumPy** - BSD-3-Clause License
+
+  - Copyright © 2005-2024, NumPy Developers
+  - https://numpy.org/
+
+- **PyTorch** - BSD-3-Clause License
+
+  - Copyright © 2016-2024, Facebook Inc. (Meta Platforms)
+  - https://pytorch.org/
+
+- **Transformers** - Apache License 2.0
+
+  - Copyright © 2018 The HuggingFace Inc. team
+  - https://github.com/huggingface/transformers
+
+- **scikit-learn** - BSD-3-Clause License
+
+  - Copyright © 2007-2024 The scikit-learn developers
+  - https://scikit-learn.org/
+
+- **Beautiful Soup 4** - MIT License
+
+  - Copyright © Leonard Richardson
+  - https://www.crummy.com/software/BeautifulSoup/
+
+- **Requests** - Apache License 2.0
+
+  - Copyright © 2019 Kenneth Reitz
+  - https://requests.readthedocs.io/
+
+- **python-dotenv** - BSD-3-Clause License
+
+  - Copyright © 2014, Saurabh Kumar
+  - https://github.com/theskumar/python-dotenv
+
+- **Gunicorn** - MIT License
+  - Copyright © 2009-2024 Benoît Chesneau
+  - https://gunicorn.org/
+
+### License Compatibility
+
+All dependencies are compatible with the MIT License:
+
+- MIT License: Permissive, allows commercial use
+- BSD-3-Clause: Permissive, compatible with MIT
+- Apache 2.0: Permissive, compatible with MIT (with patent grant)
+
+This software may be used, modified, and distributed under the terms of the MIT License.
+For full license texts of dependencies, please refer to their respective repositories.

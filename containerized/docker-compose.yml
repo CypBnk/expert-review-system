@@ -1,0 +1,72 @@
+version: "3.8"
+
+services:
+  expert-review-app:
+    build:
+      context: ..
+      dockerfile: containerized/Dockerfile
+    container_name: expert-review-system
+    ports:
+      - "${PYTHON_PORT:-5000}:5000"
+      - "${FRONTEND_PORT:-8000}:8000"
+    environment:
+      # ML Model Configuration
+      - MODEL_NAME=${MODEL_NAME:-nlptown/bert-base-multilingual-uncased-sentiment}
+      - MODEL_CACHE_DIR=/app/models
+
+      # Recommendation Thresholds
+      - HIGHLY_LIKELY_THRESHOLD=${HIGHLY_LIKELY_THRESHOLD:-0.8}
+      - WORTH_TRYING_THRESHOLD=${WORTH_TRYING_THRESHOLD:-0.6}
+      - PROCEED_CAUTION_THRESHOLD=${PROCEED_CAUTION_THRESHOLD:-0.4}
+
+      # External APIs (Optional - leave empty if not needed)
+      - IMDB_API_KEY=${IMDB_API_KEY:-}
+      - STEAM_API_KEY=${STEAM_API_KEY:-}
+      - METACRITIC_API_KEY=${METACRITIC_API_KEY:-}
+
+      # Rate Limiting
+      - RATE_LIMIT_MAX=${RATE_LIMIT_MAX:-100}
+      - RATE_LIMIT_WINDOW=${RATE_LIMIT_WINDOW:-60}
+
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_FORMAT=${LOG_FORMAT:-json}
+
+      # Application
+      - ENABLE_MOCK_DATA=${ENABLE_MOCK_DATA:-true}
+
+    volumes:
+      # Persistent data storage for user preferences
+      - ./data:/app/data
+      # Model cache (optional - speeds up startup)
+      - ./models:/app/models
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+    # Resource limits (adjust based on your needs)
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+
+# Optional: Use networks for better isolation
+networks:
+  default:
+    name: expert-review-network
+# Optional: Named volumes for better management
+# volumes:
+#   data:
+#     driver: local
+#   models:
+#     driver: local
