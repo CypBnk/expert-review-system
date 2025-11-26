@@ -332,9 +332,10 @@ export function hideLoading(element, type = "overlay") {
  */
 export function createSpinner(size = "") {
   const spinner = document.createElement("div");
-  spinner.className = `loading-spinner${size ? ` loading-spinner--${size}` : ""}`;
+  spinner.className = `loading-spinner${
+    size ? ` loading-spinner--${size}` : ""
+  }`;
   spinner.setAttribute("role", "status");
   spinner.setAttribute("aria-label", "Loading");
   return spinner;
 }
-
