@@ -13,6 +13,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - AI development disclaimer notices across all code and documentation files
 - Acknowledgment of AI-assisted development (GitHub Copilot, Claude) with human validation
+- **Proper Metacritic scraping for PC games**
+  - Updated CSS selectors for 2025 Metacritic redesign (`.c-siteReview`, `.c-siteReviewScore`)
+  - Automatic `?platform=pc` parameter addition for game URLs
+  - Extracts up to 30 user reviews with ratings, authors, and text
+  - Verified working with popular titles (Baldur's Gate 3, tested)
+
+### Changed
+
+- **Removed mock data fallbacks** from all platform analyzers
+  - IMDbAnalyzer, SteamAnalyzer, MetacriticAnalyzer now return empty lists on failure
+  - Improved error handling with specific HTTP, network, and parsing error logging
+  - System now fails gracefully without fake data when scraping fails
 
 ### Fixed
 

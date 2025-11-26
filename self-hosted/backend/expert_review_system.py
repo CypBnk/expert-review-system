@@ -445,20 +445,18 @@ class IMDbAnalyzer(PlatformAnalyzer):
                 logger.info(f"Extracted {len(reviews)} reviews from IMDb")
                 return reviews
             else:
-                logger.warning("No reviews found, using mock data")
-                return self._mock_reviews()
+                logger.warning("No reviews found on IMDb page - check URL and CSS selectors")
+                return []
                 
+        except requests.exceptions.HTTPError as e:
+            logger.error(f"HTTP error extracting IMDb reviews: {e.response.status_code} - {str(e)}")
+            return []
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Network error extracting IMDb reviews: {str(e)}")
+            return []
         except Exception as e:
-            logger.error(f"Error extracting IMDb reviews: {str(e)}. Using mock data.")
-            return self._mock_reviews()
-    
-    def _mock_reviews(self) -> List[Dict[str, Any]]:
-        """Generate mock reviews as fallback"""
-        return [
-            {'id': f'imdb_mock_{i}', 'text': f'Mock review {i} with sample content about the title.', 
-             'rating': random.randint(6, 10), 'source': 'imdb_mock'}
-            for i in range(10)
-        ]
+            logger.error(f"Error extracting IMDb reviews: {str(e)}")
+            return []
 
 
 class SteamAnalyzer(PlatformAnalyzer):
@@ -478,7 +476,7 @@ class SteamAnalyzer(PlatformAnalyzer):
             app_id_match = re.search(r'/app/(\d+)', url)
             if not app_id_match:
                 logger.error("Could not extract Steam app ID from URL")
-                return self._mock_reviews()
+                return []
             
             app_id = app_id_match.group(1)
             
@@ -508,32 +506,48 @@ class SteamAnalyzer(PlatformAnalyzer):
                 logger.info(f"Extracted {len(reviews)} reviews from Steam")
                 return reviews
             else:
-                logger.warning("No reviews in Steam API response, using mock data")
-                return self._mock_reviews()
+                logger.warning("No reviews in Steam API response")
+                return []
                 
+        except requests.exceptions.HTTPError as e:
+            logger.error(f"HTTP error extracting Steam reviews: {e.response.status_code} - {str(e)}")
+            return []
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Network error extracting Steam reviews: {str(e)}")
+            return []
         except Exception as e:
-            logger.error(f"Error extracting Steam reviews: {str(e)}. Using mock data.")
-            return self._mock_reviews()
-    
-    def _mock_reviews(self) -> List[Dict[str, Any]]:
-        """Generate mock reviews as fallback"""
-        return [
-            {'id': f'steam_mock_{i}', 'text': f'Mock Steam review {i} describing gameplay.', 
-             'rating': random.choice([0, 1]), 'source': 'steam_mock'}
-            for i in range(10)
-        ]
+            logger.error(f"Error extracting Steam reviews: {str(e)}")
+            return []
 
 
 class MetacriticAnalyzer(PlatformAnalyzer):
-    """Extract reviews from Metacritic"""
+    """Extract reviews from Metacritic
+    
+    Supports PC game reviews with URL format:
+    https://www.metacritic.com/game/{game-name}/user-reviews/?platform=pc
+    
+    Current CSS selectors (as of 2025):
+    - Review containers: div.c-siteReview or div.review_content
+    - Review text: div.c-siteReview_quote or span.blurb_expanded
+    - Rating: div.c-siteReview_score or div.metascore_w
+    - Author: span.c-siteReview_username or div.name
+    """
     
     USER_AGENTS = [
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0'
     ]
     
     def extract_reviews(self, url: str) -> List[Dict[str, Any]]:
-        """Extract reviews from Metacritic"""
+        """Extract user reviews from Metacritic
+        
+        Args:
+            url: Metacritic URL, e.g., https://www.metacritic.com/game/baldurs-gate-3/user-reviews/?platform=pc
+        
+        Returns:
+            List of review dictionaries with id, text, rating, author, source
+        """
         try:
             if not self.rate_limiter.can_proceed():
                 wait_time = self.rate_limiter.wait_time()
@@ -542,66 +556,121 @@ class MetacriticAnalyzer(PlatformAnalyzer):
             
             logger.info(f"Extracting reviews from Metacritic: {url}")
             
-            # Add /user-reviews if not present
+            # Ensure URL has /user-reviews path
             if '/user-reviews' not in url:
                 url = url.rstrip('/') + '/user-reviews'
             
-            headers = {'User-Agent': random.choice(self.USER_AGENTS)}
-            response = requests.get(url, headers=headers, timeout=10)
+            # Add PC platform parameter if not present (for games)
+            if '?' not in url and '/game/' in url:
+                url += '?platform=pc'
+            elif 'platform=' not in url and '/game/' in url:
+                url += '&platform=pc' if '?' in url else '?platform=pc'
+            
+            headers = {
+                'User-Agent': random.choice(self.USER_AGENTS),
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'DNT': '1',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1'
+            }
+            
+            response = requests.get(url, headers=headers, timeout=15)
             response.raise_for_status()
             
             soup = BeautifulSoup(response.content, 'html.parser')
             reviews = []
             
-            # Find review containers (Metacritic structure)
-            review_containers = soup.find_all('div', class_='review')
+            # Try modern Metacritic structure first (2024+ redesign)
+            review_containers = soup.find_all('div', class_='c-siteReview')
             
-            for idx, container in enumerate(review_containers[:20]):
+            # Fallback to older structure
+            if not review_containers:
+                review_containers = soup.find_all('div', class_='review_content')
+            
+            # Another fallback for legacy structure
+            if not review_containers:
+                review_containers = soup.find_all('div', class_='review')
+            
+            logger.info(f"Found {len(review_containers)} review containers")
+            
+            for idx, container in enumerate(review_containers[:30]):  # Increased to 30 reviews
                 try:
-                    # Extract text
-                    text_elem = container.find('div', class_='review_body')
+                    # Extract review text - try multiple selectors
+                    text = None
+                    text_elem = container.find('div', class_='c-siteReview_quote')
+                    if not text_elem:
+                        text_elem = container.find('span', class_='blurb_expanded')
+                    if not text_elem:
+                        text_elem = container.find('div', class_='review_body')
                     if not text_elem:
                         text_elem = container.find('span', class_='blurb')
-                    text = text_elem.get_text(strip=True) if text_elem else ''
+                    
+                    if text_elem:
+                        text = text_elem.get_text(strip=True)
+                    
+                    # Skip if no meaningful text
+                    if not text or len(text) < 20:
+                        continue
                     
                     # Extract rating (0-10 scale)
-                    rating_elem = container.find('div', class_='review_grade')
                     rating = None
+                    # Try modern structure first
+                    rating_elem = container.find('div', class_='c-siteReviewScore')
+                    if not rating_elem:
+                        rating_elem = container.find('div', class_='c-siteReview_score')
+                    if not rating_elem:
+                        rating_elem = container.find('div', class_='metascore_w')
+                    if not rating_elem:
+                        rating_elem = container.find('div', class_='review_grade')
+                    
                     if rating_elem:
                         try:
-                            rating = int(rating_elem.get_text(strip=True))
-                        except ValueError:
+                            # Get the score text from span inside or direct text
+                            score_span = rating_elem.find('span')
+                            rating_text = score_span.get_text(strip=True) if score_span else rating_elem.get_text(strip=True)
+                            rating = int(rating_text)
+                        except (ValueError, AttributeError) as e:
+                            logger.debug(f"Could not parse rating from '{rating_text}': {e}")
                             rating = None
                     
-                    if text:  # Only add if we have text
-                        reviews.append({
-                            'id': f'metacritic_{idx}',
-                            'text': text,
-                            'rating': rating,
-                            'source': 'metacritic'
-                        })
+                    # Extract author
+                    author = None
+                    author_elem = container.find('span', class_='c-siteReview_username')
+                    if not author_elem:
+                        author_elem = container.find('div', class_='name')
+                    if author_elem:
+                        author = author_elem.get_text(strip=True)
+                    
+                    # Add review to list
+                    reviews.append({
+                        'id': f'metacritic_{idx}',
+                        'text': text,
+                        'rating': rating,
+                        'author': author or 'Anonymous',
+                        'source': 'metacritic'
+                    })
+                    
                 except Exception as e:
                     logger.debug(f"Error parsing review {idx}: {str(e)}")
                     continue
             
             if reviews:
-                logger.info(f"Extracted {len(reviews)} reviews from Metacritic")
+                logger.info(f"Successfully extracted {len(reviews)} reviews from Metacritic")
                 return reviews
             else:
-                logger.warning("No reviews found, using mock data")
-                return self._mock_reviews()
+                logger.warning("No reviews found on Metacritic page - check URL and CSS selectors")
+                return []
                 
+        except requests.exceptions.HTTPError as e:
+            logger.error(f"HTTP error extracting Metacritic reviews: {e.response.status_code} - {str(e)}")
+            return []
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Network error extracting Metacritic reviews: {str(e)}")
+            return []
         except Exception as e:
-            logger.error(f"Error extracting Metacritic reviews: {str(e)}. Using mock data.")
-            return self._mock_reviews()
-    
-    def _mock_reviews(self) -> List[Dict[str, Any]]:
-        """Generate mock reviews as fallback"""
-        return [
-            {'id': f'metacritic_mock_{i}', 'text': f'Mock Metacritic review {i} about the title.', 
-             'rating': random.randint(5, 10), 'source': 'metacritic_mock'}
-            for i in range(10)
-        ]
+            logger.error(f"Error extracting Metacritic reviews: {str(e)}")
+            return []
 
 
 class ExpertReviewAnalyst:
