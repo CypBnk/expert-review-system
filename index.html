@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expert Review Analysis System V2</title>
+    <link rel="stylesheet" href="style.css" />
+    <meta
+      name="description"
+      content="AI-powered media recommendation system analyzing movies, TV shows, and games"
+    />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Navigation -->
+      <nav class="nav-bar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+          <div class="nav-brand">
+            <h1>Expert Review Analyst</h1>
+            <span class="nav-subtitle">Universal Media Edition V2</span>
+          </div>
+          <div class="nav-tabs" role="tablist">
+            <button
+              class="nav-tab active"
+              data-section="analysis"
+              role="tab"
+              aria-selected="true"
+              aria-controls="analysis-section"
+            >
+              Analysis
+            </button>
+            <button
+              class="nav-tab"
+              data-section="preferences"
+              role="tab"
+              aria-selected="false"
+              aria-controls="preferences-section"
+            >
+              Preferences
+            </button>
+            <button
+              class="nav-tab"
+              data-section="dashboard"
+              role="tab"
+              aria-selected="false"
+              aria-controls="dashboard-section"
+            >
+              Dashboard
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Analysis Section -->
+        <section
+          id="analysis-section"
+          class="content-section active"
+          role="tabpanel"
+          aria-labelledby="analysis-tab"
+        >
+          <div class="container">
+            <div class="analysis-grid">
+              <!-- Input Form -->
+              <div class="input-panel">
+                <div class="card">
+                  <div class="card__header">
+                    <h2>Analyze New Title</h2>
+                    <p class="text-secondary">
+                      Enter a movie, TV show, or game to get personalized
+                      recommendations
+                    </p>
+                  </div>
+                  <div class="card__body">
+                    <form id="analysis-form" novalidate>
+                      <div class="form-group">
+                        <label class="form-label" for="title-input">
+                          Title Name <span aria-label="required">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          id="title-input"
+                          class="form-control"
+                          placeholder="Enter title name..."
+                          required
+                          aria-required="true"
+                          autocomplete="off"
+                        />
+                      </div>
+
+                      <div class="form-group">
+                        <label class="form-label" for="media-type">
+                          Media Type <span aria-label="required">*</span>
+                        </label>
+                        <select
+                          id="media-type"
+                          class="form-control"
+                          required
+                          aria-required="true"
+                        >
+                          <option value="">Select media type...</option>
+                          <option value="movie">Movie</option>
+                          <option value="tv_show">TV Show</option>
+                          <option value="game">Video Game</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="form-label" for="imdb-url"
+                          >IMDb URL (Optional)</label
+                        >
+                        <input
+                          type="url"
+                          id="imdb-url"
+                          class="form-control"
+                          placeholder="https://www.imdb.com/title/..."
+                          aria-describedby="imdb-help"
+                        />
+                        <small id="imdb-help" class="text-secondary"
+                          >Provide an IMDb link for more accurate
+                          analysis</small
+                        >
+                      </div>
+
+                      <div class="form-group">
+                        <label class="form-label" for="steam-url"
+                          >Steam URL (Optional)</label
+                        >
+                        <input
+                          type="url"
+                          id="steam-url"
+                          class="form-control"
+                          placeholder="https://store.steampowered.com/app/..."
+                        />
+                      </div>
+
+                      <div class="form-group">
+                        <label class="form-label" for="metacritic-url"
+                          >Metacritic URL (Optional)</label
+                        >
+                        <input
+                          type="url"
+                          id="metacritic-url"
+                          class="form-control"
+                          placeholder="https://www.metacritic.com/..."
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        class="btn btn--primary btn--full-width"
+                        aria-live="polite"
+                      >
+                        <span class="analyze-btn-text">Analyze Title</span>
+                        <span class="analyze-btn-loading hidden"
+                          >Analyzing...</span
+                        >
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Results Panel -->
+              <div class="results-panel">
+                <div id="results-placeholder" class="results-placeholder">
+                  <div class="placeholder-content">
+                    <h3>Ready to Analyze</h3>
+                    <p>
+                      Enter a title in the form to get personalized
+                      recommendations based on your preferences.
+                    </p>
+                    <div class="feature-highlights">
+                      <div class="feature-item">
+                        <span
+                          class="feature-icon"
+                          role="img"
+                          aria-label="target"
+                          >🎯</span
+                        >
+                        <span>Cross-platform analysis</span>
+                      </div>
+                      <div class="feature-item">
+                        <span class="feature-icon" role="img" aria-label="brain"
+                          >🧠</span
+                        >
+                        <span>AI-powered sentiment filtering</span>
+                      </div>
+                      <div class="feature-item">
+                        <span class="feature-icon" role="img" aria-label="chart"
+                          >📊</span
+                        >
+                        <span>Theme compatibility scoring</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  id="analysis-results"
+                  class="analysis-results hidden"
+                  role="region"
+                  aria-live="polite"
+                >
+                  <div class="card">
+                    <div class="card__header">
+                      <h2 id="result-title">Analysis Results</h2>
+                    </div>
+                    <div class="card__body">
+                      <!-- Recommendation Badge -->
+                      <div class="recommendation-badge">
+                        <div
+                          id="rec-badge"
+                          class="rec-badge rec-badge--highly-likely"
+                          role="status"
+                        >
+                          <span class="rec-badge__text">Highly Likely</span>
+                          <span class="rec-badge__score">87% Match</span>
+                        </div>
+                      </div>
+
+                      <!-- Compatibility Score -->
+                      <div class="compatibility-section">
+                        <h3>Theme Compatibility</h3>
+                        <div
+                          class="progress-bar"
+                          role="progressbar"
+                          aria-valuenow="87"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        >
+                          <div
+                            id="compatibility-progress"
+                            class="progress-fill"
+                            style="width: 87%"
+                          ></div>
+                          <span class="progress-label">87%</span>
+                        </div>
+                      </div>
+
+                      <!-- Theme Alignment -->
+                      <div class="theme-alignment">
+                        <h3>Matching Themes</h3>
+                        <div id="theme-tags" class="theme-tags" role="list">
+                          <!-- Will be populated by JavaScript -->
+                        </div>
+                      </div>
+
+                      <!-- Sentiment Summary -->
+                      <div class="sentiment-section">
+                        <h3>Audience Sentiment</h3>
+                        <div class="sentiment-bars">
+                          <div class="sentiment-bar">
+                            <span class="sentiment-label">Positive</span>
+                            <div
+                              class="sentiment-progress"
+                              role="progressbar"
+                              aria-valuenow="78"
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            >
+                              <div
+                                class="sentiment-fill sentiment-fill--positive"
+                                style="width: 78%"
+                              ></div>
+                            </div>
+                            <span class="sentiment-value">78%</span>
+                          </div>
+                          <div class="sentiment-bar">
+                            <span class="sentiment-label">Neutral</span>
+                            <div
+                              class="sentiment-progress"
+                              role="progressbar"
+                              aria-valuenow="15"
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            >
+                              <div
+                                class="sentiment-fill sentiment-fill--neutral"
+                                style="width: 15%"
+                              ></div>
+                            </div>
+                            <span class="sentiment-value">15%</span>
+                          </div>
+                          <div class="sentiment-bar">
+                            <span class="sentiment-label">Negative</span>
+                            <div
+                              class="sentiment-progress"
+                              role="progressbar"
+                              aria-valuenow="7"
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            >
+                              <div
+                                class="sentiment-fill sentiment-fill--negative"
+                                style="width: 7%"
+                              ></div>
+                            </div>
+                            <span class="sentiment-value">7%</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Matching Titles -->
+                      <div class="matching-titles">
+                        <h3>Similar to Your Favorites</h3>
+                        <div id="matching-titles-list" class="matching-list">
+                          <!-- Will be populated by JavaScript -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Preferences Section -->
+        <section
+          id="preferences-section"
+          class="content-section"
+          role="tabpanel"
+          aria-labelledby="preferences-tab"
+        >
+          <div class="container">
+            <div class="preferences-header">
+              <h2>Your Media Preferences</h2>
+              <button
+                class="btn btn--primary"
+                id="add-preference-btn"
+                aria-label="Add new preference"
+              >
+                Add New Preference
+              </button>
+            </div>
+
+            <div class="preferences-content">
+              <div class="card">
+                <div class="card__body">
+                  <div class="preferences-table-container">
+                    <table class="preferences-table" role="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Title</th>
+                          <th scope="col">Rating</th>
+                          <th scope="col">Type</th>
+                          <th scope="col">Themes</th>
+                          <th scope="col">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="preferences-tbody">
+                        <!-- Will be populated by JavaScript -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Charts -->
+              <div class="preferences-charts">
+                <div class="chart-container">
+                  <img
+                    src="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/3000250b8a4de02113afaabead896940/6e4363d5-a3ad-4a1c-a5a0-576ebd221806/41bca786.png"
+                    alt="Bar chart showing user ratings by media type"
+                    class="chart-image"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="chart-container">
+                  <img
+                    src="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/3000250b8a4de02113afaabead896940/75794b6a-afbb-410a-89a3-3d2cf27592c9/101f6f1a.png"
+                    alt="Diagram showing recommendation framework"
+                    class="chart-image"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section
+          id="dashboard-section"
+          class="content-section"
+          role="tabpanel"
+          aria-labelledby="dashboard-tab"
+        >
+          <div class="container">
+            <h2>System Dashboard</h2>
+
+            <!-- Metrics Cards -->
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-icon" role="img" aria-label="chart">📊</div>
+                <div class="metric-content">
+                  <div
+                    class="metric-value"
+                    aria-label="Reviews processed today"
+                  >
+                    15,420
+                  </div>
+                  <div class="metric-label">Reviews Processed Today</div>
+                </div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-icon" role="img" aria-label="target">🎯</div>
+                <div class="metric-content">
+                  <div class="metric-value" aria-label="System accuracy">
+                    91.2%
+                  </div>
+                  <div class="metric-label">System Accuracy</div>
+                </div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-icon" role="img" aria-label="lightning">
+                  ⚡
+                </div>
+                <div class="metric-content">
+                  <div
+                    class="metric-value"
+                    aria-label="Average processing speed"
+                  >
+                    1,100ms
+                  </div>
+                  <div class="metric-label">Avg Processing Speed</div>
+                </div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-icon" role="img" aria-label="globe">🌐</div>
+                <div class="metric-content">
+                  <div class="metric-value" aria-label="Active platforms">
+                    3
+                  </div>
+                  <div class="metric-label">Active Platforms</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+              <div class="card">
+                <div class="card__header">
+                  <h3>Recent Analysis History</h3>
+                </div>
+                <div class="card__body">
+                  <div class="activity-list" id="activity-list">
+                    <div class="activity-item">
+                      <div class="activity-icon" role="img" aria-label="movie">
+                        🎬
+                      </div>
+                      <div class="activity-content">
+                        <div class="activity-title">The Last of Us (TV)</div>
+                        <div class="activity-meta">
+                          Analyzed 2 hours ago • Highly Likely (87% match)
+                        </div>
+                      </div>
+                      <div class="activity-status status status--success">
+                        Success
+                      </div>
+                    </div>
+                    <div class="activity-item">
+                      <div class="activity-icon" role="img" aria-label="game">
+                        🎮
+                      </div>
+                      <div class="activity-content">
+                        <div class="activity-title">Baldur's Gate 3</div>
+                        <div class="activity-meta">
+                          Analyzed 5 hours ago • Worth Trying (74% match)
+                        </div>
+                      </div>
+                      <div class="activity-status status status--info">
+                        Processed
+                      </div>
+                    </div>
+                    <div class="activity-item">
+                      <div class="activity-icon" role="img" aria-label="movie">
+                        🎬
+                      </div>
+                      <div class="activity-content">
+                        <div class="activity-title">Dune: Part Two</div>
+                        <div class="activity-meta">
+                          Analyzed 8 hours ago • Highly Likely (91% match)
+                        </div>
+                      </div>
+                      <div class="activity-status status status--success">
+                        Success
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Add Preference Modal -->
+      <div
+        id="add-preference-modal"
+        class="modal hidden"
+        role="dialog"
+        aria-labelledby="modal-title"
+        aria-modal="true"
+      >
+        <div class="modal-overlay" id="modal-overlay" aria-hidden="true"></div>
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="modal-title">Add New Preference</h3>
+            <button
+              class="modal-close"
+              id="modal-close"
+              aria-label="Close modal"
+            >
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="preference-form" novalidate>
+              <div class="form-group">
+                <label class="form-label" for="pref-title">
+                  Title <span aria-label="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="pref-title"
+                  class="form-control"
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pref-rating">
+                  Rating (1-10) <span aria-label="required">*</span>
+                </label>
+                <input
+                  type="number"
+                  id="pref-rating"
+                  class="form-control"
+                  min="1"
+                  max="10"
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pref-media-type">
+                  Media Type <span aria-label="required">*</span>
+                </label>
+                <select
+                  id="pref-media-type"
+                  class="form-control"
+                  required
+                  aria-required="true"
+                >
+                  <option value="">Select media type...</option>
+                  <option value="TV">TV Show</option>
+                  <option value="Game">Video Game</option>
+                  <option value="Movie">Movie</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pref-themes"
+                  >Themes (comma-separated)</label
+                >
+                <input
+                  type="text"
+                  id="pref-themes"
+                  class="form-control"
+                  placeholder="e.g., character_development, moral_complexity"
+                  aria-describedby="themes-help"
+                />
+                <small id="themes-help" class="text-secondary"
+                  >Separate multiple themes with commas</small
+                >
+              </div>
+              <div class="modal-actions">
+                <button
+                  type="button"
+                  class="btn btn--secondary"
+                  id="cancel-preference"
+                >
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn--primary">
+                  Add Preference
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div
+      id="toast-container"
+      class="toast-container"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
