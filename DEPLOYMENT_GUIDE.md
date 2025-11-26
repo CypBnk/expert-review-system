@@ -4,6 +4,11 @@ Quick decision guide to choose between **self-hosted** and **containerized** dep
 
 ---
 
+> **⚠️ AI Development Notice**  
+> This documentation was created with AI assistance (GitHub Copilot, Claude). All content has been reviewed and validated for accuracy.
+
+---
+
 ## 🏠 Self-Hosted
 
 ### ✅ Choose Self-Hosted If:

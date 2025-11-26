@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- AI development disclaimer notices across all code and documentation files
+- Acknowledgment of AI-assisted development (GitHub Copilot, Claude) with human validation
+
 ### Fixed
 
 - **Self-Hosted Deployment Scripts**

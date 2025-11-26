@@ -2,6 +2,17 @@
 
 This file lists the significant authors and contributors to the Expert Review Analysis System.
 
+---
+
+## ⚠️ AI Development Disclaimer
+
+This project was developed with significant assistance from AI tools:
+
+- **GitHub Copilot** - Code completion and suggestions
+- **Claude (Anthropic)** - Architecture design, code review, documentation
+
+All AI-generated code and documentation has been reviewed, tested, and validated by human developers. The AI tools served as collaborative assistants, with final decisions and quality control performed by the project maintainers.
+
 ## Project Creator & Lead Developer
 
 **Primary Author:** Marc Holländer

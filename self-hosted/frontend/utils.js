@@ -1,4 +1,8 @@
 // Utility Functions
+//
+// AI Development Notice:
+// This code was developed with AI assistance (GitHub Copilot, Claude).
+// All code has been reviewed, tested, and validated by human developers.
 
 /**
  * Sanitize HTML to prevent XSS attacks

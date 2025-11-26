@@ -1,4 +1,8 @@
 // Utility Functions
+//
+// AI Development Notice:
+// This code was developed with AI assistance (GitHub Copilot, Claude).
+// All code has been reviewed, tested, and validated by human developers.
 
 /**
  * Sanitize HTML to prevent XSS attacks
@@ -332,9 +336,10 @@ export function hideLoading(element, type = "overlay") {
  */
 export function createSpinner(size = "") {
   const spinner = document.createElement("div");
-  spinner.className = `loading-spinner${size ? ` loading-spinner--${size}` : ""}`;
+  spinner.className = `loading-spinner${
+    size ? ` loading-spinner--${size}` : ""
+  }`;
   spinner.setAttribute("role", "status");
   spinner.setAttribute("aria-label", "Loading");
   return spinner;
 }
-

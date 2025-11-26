@@ -18,6 +18,11 @@
 
 ---
 
+> **⚠️ AI Development Disclaimer**  
+> This project was developed with AI assistance (GitHub Copilot, Claude). While thoroughly tested and validated, users should review code before production deployment. All AI-generated content has been reviewed by human developers.
+
+---
+
 ## 📖 Overview
 
 The Expert Review Analysis System uses advanced AI and web scraping to help you discover media that matches your taste. By analyzing professional reviews from IMDb, Steam, and Metacritic, it provides personalized compatibility scores and intelligent recommendations.

@@ -1,5 +1,9 @@
 """
 Flask API Server for Expert Review Analysis System V2
+
+AI Development Notice:
+This code was developed with AI assistance (GitHub Copilot, Claude).
+All code has been reviewed, tested, and validated by human developers.
 """
 
 from flask import Flask, request, jsonify

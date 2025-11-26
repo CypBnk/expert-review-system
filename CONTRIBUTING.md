@@ -2,6 +2,17 @@
 
 First off, thank you for considering contributing to the Expert Review Analysis System! It's people like you that make this project better for everyone.
 
+---
+
+## ⚠️ AI Development Notice
+
+**This project was developed with AI assistance.** We encourage contributors to:
+
+- Use AI tools (GitHub Copilot, ChatGPT, Claude, etc.) for productivity
+- Always review and test AI-generated code before submitting
+- Document any AI-assisted contributions in commit messages or PRs
+- Ensure all code meets project quality standards regardless of origin
+
 ## Table of Contents
 
 - [Code of Conduct](#code-of-conduct)

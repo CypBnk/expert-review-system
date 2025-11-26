@@ -1,5 +1,10 @@
 """
 Expert Review Analysis System V2 - Backend API
+
+AI Development Notice:
+This code was developed with AI assistance (GitHub Copilot, Claude).
+All code has been reviewed, tested, and validated by human developers.
+
 Fixes: Missing imports, error handling, type hints, logging, input validation
 """
 

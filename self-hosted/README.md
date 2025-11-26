@@ -2,6 +2,13 @@
 
 This folder contains everything needed to run the Expert Review Analysis System on your own server.
 
+---
+
+> **⚠️ AI Development Notice**  
+> This documentation and deployment scripts were created with AI assistance (GitHub Copilot, Claude). All content has been reviewed and tested.
+
+---
+
 ## 📋 Prerequisites
 
 - Python 3.11 or higher

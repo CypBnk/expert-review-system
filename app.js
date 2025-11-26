@@ -1,4 +1,9 @@
 // Expert Review Analysis System V2 - Main Application
+//
+// AI Development Notice:
+// This code was developed with AI assistance (GitHub Copilot, Claude).
+// All code has been reviewed, tested, and validated by human developers.
+//
 // Fixed: XSS vulnerabilities, error handling, data persistence, API integration
 
 import { CONFIG, RECOMMENDATION_LEVELS } from "./config.js";

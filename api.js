@@ -1,4 +1,9 @@
 // API Communication Layer
+//
+// AI Development Notice:
+// This code was developed with AI assistance (GitHub Copilot, Claude).
+// All code has been reviewed, tested, and validated by human developers.
+
 import { CONFIG } from "./config.js";
 
 export class APIClient {

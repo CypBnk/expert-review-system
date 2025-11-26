@@ -4,6 +4,11 @@
 
 ---
 
+> **🤖 AI Development Acknowledgment**  
+> This codebase was developed collaboratively with AI assistants (GitHub Copilot, Claude). These instructions guide AI agents to maintain consistency with established patterns. All AI contributions are reviewed and validated by human developers.
+
+---
+
 ## 🎯 System Overview
 
 A web scraping + NLP analysis engine that extracts reviews from IMDb/Steam/Metacritic, performs theme detection (20 vocabularies), sentiment alignment, and generates personalized media recommendations. Built as monorepo with dual deployment strategies.

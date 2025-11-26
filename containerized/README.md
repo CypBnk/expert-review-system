@@ -2,6 +2,13 @@
 
 This folder contains everything needed to run the Expert Review Analysis System as a Docker container.
 
+---
+
+> **⚠️ AI Development Notice**  
+> This Docker configuration and documentation were created with AI assistance (GitHub Copilot, Claude). All content has been reviewed and tested.
+
+---
+
 ## 📋 Prerequisites
 
 - Docker 20.10 or higher

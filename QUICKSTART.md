@@ -1,5 +1,10 @@
 # Quick Start Guide
 
+> **⚠️ AI Development Notice**  
+> This project was developed with AI assistance (GitHub Copilot, Claude). All code and documentation has been reviewed and tested.
+
+---
+
 ## 5-Minute Setup
 
 ### For Self-Hosted
