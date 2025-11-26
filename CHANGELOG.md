@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+_No changes yet._
+
+## [2.2.0] - 2025-11-26
+
 ### Added
 
 - AI development disclaimer notices across all code and documentation files
@@ -18,6 +22,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Automatic `?platform=pc` parameter addition for game URLs
   - Extracts up to 30 user reviews with ratings, authors, and text
   - Verified working with popular titles (Baldur's Gate 3, tested)
+- **Real BERT sentiment analysis integration**
+  - Added `BERTSentimentAnalyzer` using `nlptown/bert-base-multilingual-uncased-sentiment`
+  - Batch inference with confidence scoring and CPU execution
+  - Fallback to mock mode when model load fails (graceful degradation)
+- **Evaluation metadata in results**
+  - New `evaluation` field returned by `/api/analyze` with `mode` (`bert`|`mock`) and `model`
+  - Frontend header now appends `[BERT-Sentiment Used]` or `[Mock-Data Used]`
+
+### Changed
+
+- Compatibility scoring now uses actual BERT average sentiment (1–5 star normalization)
+- Sentiment alignment updated to derive from `score` field (removed `predicted_score` placeholder)
+- Docker build now pre-downloads ML model during image creation to avoid runtime delays
+- Gunicorn configuration reduced to a single worker with `PYTORCH_NUM_THREADS=2` for memory stability
+
+### Fixed
+
+- Dataclass ordering error in `AnalysisResult` (non-default after default) causing worker crash
+- Missing `evaluation` field in API response serialization
+- Container model caching issue caused by volume override (removed model volume mount)
+
+### Performance / Infrastructure
+
+- Smaller runtime memory footprint by lowering worker count and limiting Torch threads
+- Faster cold starts due to pre-cached Transformers model in image layer
+- Improved stability under limited disk space (prune strategy + cached model)
 
 ### Changed
 
@@ -305,7 +335,7 @@ Complete refactor addressing critical security issues and implementing modern be
 | **Web Scraping**     | ❌ None         | ❌ Mocked        | ✅ Real (IMDb/Steam/Metacritic) |
 | **Theme Analysis**   | ❌ Random       | ✅ Mocked        | ✅ Keyword-Based                |
 | **Containerization** | ❌ None         | ❌ None          | ✅ Docker Ready                 |
-| **API Versioning**   | ❌ None         | ✅ v2.0.0        | ✅ v2.1.0                       |
+| **API Versioning**   | ❌ None         | ✅ v2.0.0        | ✅ v2.2.0                       |
 
 ---
 

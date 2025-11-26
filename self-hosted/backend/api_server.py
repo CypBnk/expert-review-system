@@ -44,7 +44,7 @@ analyzer = ExpertReviewAnalyst(user_preferences=preference_store.get_all())
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
-    return jsonify({'status': 'healthy', 'version': '2.1.1'}), 200
+    return jsonify({'status': 'healthy', 'version': '2.2.0'}), 200
 
 
 @app.route('/api/analyze', methods=['POST'])
@@ -95,6 +95,7 @@ def analyze_title():
             'compatibility_score': result.compatibility_score,
             'theme_alignment': [theme[0] for theme in result.theme_alignment[:5]],
             'sentiment_summary': result.sentiment_summary,
+            'evaluation': result.evaluation,
             'matching_titles': [
                 {'title': t, 'score': 0.9 - i*0.05}
                 for i, t in enumerate(result.matching_titles)

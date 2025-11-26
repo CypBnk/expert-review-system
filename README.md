@@ -4,7 +4,7 @@
 
 ### AI-Powered Media Recommendation Engine
 
-[![Version](https://img.shields.io/badge/version-2.1.1-blue.svg)](https://github.com/CypBnk/expert-review-system/releases)
+[![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)](https://github.com/CypBnk/expert-review-system/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
@@ -40,6 +40,16 @@ The Expert Review Analysis System uses advanced AI and web scraping to help you 
 ---
 
 ## ✨ Features
+
+### Version 2.2 (BERT Sentiment & Evaluation)
+
+#### 🚀 New in 2.2.0
+
+- Real BERT-based sentiment analysis (nlptown multilingual model)
+- Evaluation metadata (`mode`, `model`) surfaced in API & UI
+- Improved compatibility scoring using true sentiment distribution
+- Docker image now pre-caches model for faster cold starts
+- Stability improvements (single Gunicorn worker, limited Torch threads)
 
 ### Version 2.1 (Production Ready)
 
@@ -345,6 +355,7 @@ Security is a priority. Please review our [Security Policy](SECURITY.md) for:
 ## 📊 Version History
 
 - **v2.1.1** (2025-11-26) - Frontend enhancements: dynamic loading states with spinners
+- **v2.2.0** (2025-11-26) - BERT sentiment, evaluation metadata, scoring & Docker stability
 - **v2.1.0** (2025-11-26) - Production backend with real scraping, filtering, Docker
 - **v2.0.0** (2025-11-25) - Security overhaul, backend integration, modular architecture
 - **v1.0.0** - Initial release with basic checklist functionality
