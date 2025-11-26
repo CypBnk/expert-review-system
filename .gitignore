@@ -1,6 +1,7 @@
 # Development files and documentation
 unneeded-files/
 docs/
+FILE_TRACKER.md
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

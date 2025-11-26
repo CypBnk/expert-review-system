@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Added
+- Internal file tracking documentation (FILE_TRACKER.md) for version management and security
+
+---
+
+## [2.1.1] - 2025-11-26
+
+### Added
+
+- Dynamic loading states with spinner components
+  - Loading spinner CSS with smooth rotation animations
+  - Multiple spinner sizes (small, default, large)
+  - Loading overlay with backdrop blur effect
+  - Button loading state with inline spinner
+  - Form loading state that disables all inputs
+  - Card loading state with shimmer animation
+- Loading utility functions (`showLoading()`, `hideLoading()`, `createSpinner()`)
+- Accessibility improvements for loading states
+  - `aria-busy` attribute on loading elements
+  - `role="status"` for screen reader announcements
+  - `aria-label` on spinner elements
+
+### Changed
+
+- Analysis form now shows comprehensive loading states during API calls
+- Form inputs automatically disabled during processing to prevent multiple submissions
+
+---
+
 ## [2.1.0] - 2025-11-26
 
 ### 🎯 Production-Ready Release
