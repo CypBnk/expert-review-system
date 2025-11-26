@@ -364,7 +364,6 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
 
 <div align="center">
 
-**Made with ❤️ by the Expert Review Analysis System Team**
 
 [⭐ Star this repo](https://github.com/CypBnk/expert-review-system) if you find it helpful!
 
