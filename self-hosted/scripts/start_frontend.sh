@@ -26,5 +26,5 @@ elif command -v open &> /dev/null; then
     open http://localhost:8000 2>/dev/null &
 fi
 
-# Start Python HTTP server
-python3 -m http.server 8000
+# Start Python HTTP server from frontend directory
+cd frontend && python3 -m http.server 8000

@@ -23,5 +23,5 @@ echo ""
 echo "========================================"
 echo ""
 
-# Start the Flask server
-python3 api_server.py
+# Start the Flask server from backend directory
+python3 ./backend/api_server.py

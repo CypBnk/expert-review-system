@@ -24,6 +24,6 @@ echo.
 
 REM Start Python HTTP server and open browser
 start http://localhost:8000
-python -m http.server 8000
+cd frontend && python -m http.server 8000
 
 pause

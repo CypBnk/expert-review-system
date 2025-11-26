@@ -43,11 +43,36 @@ echo ""
 # Activate virtual environment and install dependencies
 source venv/bin/activate
 
-# Install basic dependencies first (lighter)
-pip install flask flask-cors pandas numpy --quiet
+# Install dependencies from requirements.txt
+echo "Installing Python dependencies from backend/requirements.txt..."
+echo "This may take several minutes and download ~2GB..."
+echo ""
+pip install -r backend/requirements.txt
+
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "[ERROR] Failed to install dependencies"
+    echo "Please check your internet connection and try again"
+    exit 1
+fi
+
+# Copy .env.example if .env doesn't exist
+if [ ! -f ".env" ] && [ -f ".env.example" ]; then
+    cp ".env.example" ".env"
+    echo ""
+    echo "[INFO] Created .env from .env.example"
+    echo "You can edit .env to customize configuration"
+fi
 
 echo ""
 echo "========================================"
+echo "Setup Complete!"
+echo "========================================"
+echo ""
+echo "To start all services: ./scripts/start_all.sh"
+echo "To start backend only: ./scripts/start_server.sh"
+echo "To start frontend only: ./scripts/start_frontend.sh"
+echo ""
 echo "Setup Complete!"
 echo "========================================"
 echo ""

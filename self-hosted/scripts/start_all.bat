@@ -16,13 +16,13 @@ if not exist "venv\Scripts\activate.bat" (
 )
 
 echo [INFO] Starting backend server in new window...
-start "API Server - Port 5000" cmd /k "call venv\Scripts\activate.bat && python api_server.py"
+start "API Server - Port 5000" cmd /k "call venv\Scripts\activate.bat && python .\\backend\\api_server.py"
 
 REM Wait a moment for backend to start
 timeout /t 3 /nobreak >nul
 
 echo [INFO] Starting frontend server in new window...
-start "Frontend Server - Port 8000" cmd /k "python -m http.server 8000"
+start "Frontend Server - Port 8000" cmd /k "cd frontend && python -m http.server 8000"
 
 REM Wait a moment for frontend to start
 timeout /t 2 /nobreak >nul

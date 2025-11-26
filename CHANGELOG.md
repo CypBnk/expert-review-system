@@ -9,8 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- Internal file tracking documentation (FILE_TRACKER.md) for version management and security
+### Fixed
+
+- **Self-Hosted Deployment Scripts**
+  - `setup.bat` and `setup.sh` now install ALL dependencies including PyTorch from `backend/requirements.txt`
+  - Fixed missing torch module error that prevented API server startup
+  - Updated all Windows batch scripts for frontend/backend separation
+  - Updated all Linux/Mac shell scripts for frontend/backend separation
+  - Fixed `test_environment.bat` to check correct file paths (`frontend/`, `backend/`)
+- **Docker Deployment**
+
+  - Synced `requirements.txt`, `api_server.py`, `expert_review_system.py`, `preference_store.py` to root for Docker builds
+  - Verified Docker image builds successfully with all dependencies (12.6GB including PyTorch 2.9.1)
+  - Added `.gitignore` comment explaining root-level Python files are for Docker
+
+- **File Structure**
+  - Organized AI agent instructions into `.ai-instructions/` folder (excluded from git)
+  - Updated `.github/copilot-instructions.md` to reference new location
+  - Maintained backward compatibility for GitHub Copilot
+
+### Changed
+
+- Setup scripts now provide clearer output about dependency installation progress
+- Both deployment models (Docker and self-hosted) fully validated and working
 
 ---
 

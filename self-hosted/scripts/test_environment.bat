@@ -29,25 +29,32 @@ if %errorlevel% neq 0 (
 
 echo.
 echo [TEST 3] Checking required files...
-if not exist "index.html" (
-    echo [FAIL] index.html not found
+if not exist "frontend\index.html" (
+    echo [FAIL] frontend\index.html not found
     set TEST_FAILED=1
 ) else (
-    echo [PASS] index.html exists
+    echo [PASS] frontend\index.html exists
 )
 
-if not exist "api_server.py" (
-    echo [FAIL] api_server.py not found
+if not exist "backend\api_server.py" (
+    echo [FAIL] backend\api_server.py not found
     set TEST_FAILED=1
 ) else (
-    echo [PASS] api_server.py exists
+    echo [PASS] backend\api_server.py exists
 )
 
-if not exist "config.js" (
-    echo [FAIL] config.js not found
+if not exist "backend\expert_review_system.py" (
+    echo [FAIL] backend\expert_review_system.py not found
     set TEST_FAILED=1
 ) else (
-    echo [PASS] config.js exists
+    echo [PASS] backend\expert_review_system.py exists
+)
+
+if not exist "frontend\config.js" (
+    echo [FAIL] frontend\config.js not found
+    set TEST_FAILED=1
+) else (
+    echo [PASS] frontend\config.js exists
 )
 
 echo.

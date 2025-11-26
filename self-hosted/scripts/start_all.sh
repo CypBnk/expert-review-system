@@ -16,15 +16,16 @@ fi
 
 echo "[INFO] Starting backend server..."
 source venv/bin/activate
-python3 api_server.py &
+python3 ./backend/api_server.py &
 BACKEND_PID=$!
 
 # Wait for backend to start
 sleep 3
 
 echo "[INFO] Starting frontend server..."
-python3 -m http.server 8000 &
+cd frontend && python3 -m http.server 8000 &
 FRONTEND_PID=$!
+cd ..
 
 # Wait for frontend to start
 sleep 2

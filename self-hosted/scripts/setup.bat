@@ -47,18 +47,37 @@ echo.
 REM Activate virtual environment and install dependencies
 call venv\Scripts\activate.bat
 
-REM Install basic dependencies first (lighter)
-pip install flask flask-cors pandas numpy --quiet
+REM Install dependencies from requirements.txt
+echo Installing Python dependencies from backend\requirements.txt...
+echo This may take several minutes and download ~2GB...
+echo.
+pip install -r backend\requirements.txt
+
+if %errorlevel% neq 0 (
+    echo.
+    echo [ERROR] Failed to install dependencies
+    echo Please check your internet connection and try again
+    pause
+    exit /b 1
+)
+
+REM Copy .env.example if .env doesn't exist
+if not exist ".env" (
+    if exist ".env.example" (
+        copy ".env.example" ".env"
+        echo.
+        echo [INFO] Created .env from .env.example
+        echo You can edit .env to customize configuration
+    )
+)
 
 echo.
 echo ========================================
 echo Setup Complete!
 echo ========================================
 echo.
-echo OPTIONAL: To install full ML dependencies (torch, transformers)
-echo Run: pip install -r requirements.txt
-echo Note: This will download ~2GB of packages
-echo.
-echo To start the server, run: start_server.bat
+echo To start all services: .\scripts\start_all.bat
+echo To start backend only: .\scripts\start_server.bat
+echo To start frontend only: .\scripts\start_frontend.bat
 echo.
 pause

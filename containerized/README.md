@@ -9,11 +9,43 @@ This folder contains everything needed to run the Expert Review Analysis System 
 
 ## 🚀 Quick Start
 
-### Option 1: Docker Run (Simple)
+### Prerequisites Check
+
+Ensure Docker is running:
 
 ```bash
-# Build the image
-docker build -t expert-review-system:latest .
+docker --version
+docker-compose --version
+```
+
+### Option 1: Docker Compose (Recommended)
+
+```bash
+# Navigate to containerized directory
+cd containerized
+
+# Create environment file
+cp .env.example .env
+
+# Start services (builds image automatically)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Check health
+curl http://localhost:5000/api/health
+
+# Stop services
+docker-compose down
+```
+
+### Option 2: Docker Run (Manual)
+
+```bash
+# Build from project root
+cd ..
+docker build -f containerized/Dockerfile -t expert-review-system:latest .
 
 # Run the container
 docker run -d \
@@ -24,24 +56,14 @@ docker run -d \
   expert-review-system:latest
 
 # Check logs
-docker logs expert-review
+docker logs -f expert-review
 
 # Stop container
 docker stop expert-review
+docker rm expert-review
 ```
 
-### Option 2: Docker Compose (Recommended)
-
-```bash
-# Start services
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Stop services
-docker-compose down
-```
+⚠️ **Note:** Docker image is ~12.6GB due to PyTorch and ML dependencies.
 
 ## 🌐 Access Application
 

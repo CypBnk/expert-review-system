@@ -12,18 +12,26 @@ This folder contains everything needed to run the Expert Review Analysis System 
 
 ### 1. Install Dependencies
 
+The setup script will:
+
+- Create a Python virtual environment
+- Install ALL dependencies including PyTorch (~2GB download)
+- Copy `.env.example` to `.env` for configuration
+
 **Windows:**
 
 ```bash
-setup.bat
+.\scripts\setup.bat
 ```
 
 **Linux/Mac:**
 
 ```bash
-chmod +x setup.sh
-./setup.sh
+chmod +x scripts/setup.sh
+./scripts/setup.sh
 ```
+
+⚠️ **Note:** The installation may take 5-10 minutes as it downloads PyTorch and other ML dependencies.
 
 ### 2. Configure Environment
 
@@ -44,34 +52,42 @@ Edit `.env` to customize:
 
 **Option A: Start All Services (Recommended)**
 
-```bash
-# Windows
-start_all.bat
+Windows:
 
-# Linux/Mac
-./start_all.sh
+```bash
+.\scripts\start_all.bat
+```
+
+Linux/Mac:
+
+```bash
+./scripts/start_all.sh
 ```
 
 **Option B: Start Services Separately**
 
-Backend API:
+Backend API (Windows):
 
 ```bash
-# Windows
-start_server.bat
-
-# Linux/Mac
-./start_server.sh
+.\scripts\start_server.bat
 ```
 
-Frontend:
+Backend API (Linux/Mac):
 
 ```bash
-# Windows
-start_frontend.bat
+./scripts/start_server.sh
+```
 
-# Linux/Mac
-./start_frontend.sh
+Frontend (Windows):
+
+```bash
+.\scripts\start_frontend.bat
+```
+
+Frontend (Linux/Mac):
+
+```bash
+./scripts/start_frontend.sh
 ```
 
 ### 4. Access Application

@@ -25,6 +25,6 @@ echo ========================================
 echo.
 
 REM Start the Flask server
-python api_server.py
+python .\\backend\\api_server.py
 
 pause

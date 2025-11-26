@@ -101,9 +101,11 @@ cp .env.example .env
 # API: http://localhost:5000
 ```
 
+**Note:** Setup installs all dependencies including PyTorch (~2GB). This may take 5-10 minutes on first run.
+
 ### Option 2: Docker (Production Ready)
 
-**Prerequisites:** Docker 20.10+
+**Prerequisites:** Docker 20.10+, Docker Compose
 
 ```bash
 # Clone the repository

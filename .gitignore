@@ -3,6 +3,20 @@ unneeded-files/
 docs/
 FILE_TRACKER.md
 
+# NOTE: Root-level Python files (api_server.py, expert_review_system.py, preference_store.py, requirements.txt)
+# are synced copies from self-hosted/backend/ - required for Docker containerized deployment.
+# Keep them in sync before commits using: Copy-Item "self-hosted\backend\*.py" "." -Force
+
+# AI agent instructions (keep private, but .github/ folder is public)
+.ai-instructions/
+GUIDELINES.md
+.cursorrules
+.windsurfrules
+.clinerules
+AGENT.md
+AGENTS.md
+CLAUDE.md
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -93,9 +93,23 @@ containerized/
 ### For Development:
 
 1. Start with **self-hosted** for quick iterations
-2. Make your changes to Python/JS files directly
-3. Test locally with the start scripts
-4. When stable, build **Docker image** to test containerized version
+2. Run `.\scripts\setup.bat` (Windows) or `./scripts/setup.sh` (Linux/Mac) once
+3. Use `.\scripts\start_all.bat` or `./scripts/start_all.sh` to start servers
+4. Make your changes to Python/JS files directly in `self-hosted/backend/` and `self-hosted/frontend/`
+5. Test locally - backend restarts automatically, frontend serves files directly
+6. When stable, sync files to root and build **Docker image** to test containerized version
+
+**File Sync for Docker:**
+
+```powershell
+# Windows PowerShell (from project root)
+Copy-Item "self-hosted\backend\*.py" "." -Force
+Copy-Item "self-hosted\backend\requirements.txt" "." -Force
+
+# Linux/Mac (from project root)
+cp self-hosted/backend/*.py .
+cp self-hosted/backend/requirements.txt .
+```
 
 ### For Production:
 
