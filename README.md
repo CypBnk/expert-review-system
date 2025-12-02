@@ -4,7 +4,7 @@
 
 ### AI-Powered Media Recommendation Engine
 
-[![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)](https://github.com/CypBnk/expert-review-system/releases)
+[![Version](https://img.shields.io/badge/version-2.2.1-blue.svg)](https://github.com/CypBnk/expert-review-system/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
@@ -396,6 +396,8 @@ Security is a priority. Please review our [Security Policy](SECURITY.md) for:
 ---
 
 ## 📊 Version History
+
+- **v2.2.1** (2025-12-02) - Expanded review extraction capacity to 1000 reviews per platform
 
 - **v2.2.0** (2025-11-26) - BERT sentiment, evaluation metadata, scoring & Docker stability
 - **v2.1.1** (2025-11-26) - Frontend enhancements: dynamic loading states with spinners

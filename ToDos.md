@@ -64,4 +64,4 @@ This file captures current open tasks to continue development toward a fully fea
 
 **Last Updated:** 2025-11-26  
 **Status:** Backend complete; Frontend loading states implemented; Accessibility, testing, and documentation remaining  
-**Version:** 2.2.0
+**Version:** 2.2.1

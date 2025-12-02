@@ -44,7 +44,7 @@ analyzer = ExpertReviewAnalyst(user_preferences=preference_store.get_all())
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
-    return jsonify({'status': 'healthy', 'version': '2.2.0'}), 200
+    return jsonify({'status': 'healthy', 'version': '2.2.1'}), 200
 
 
 @app.route('/api/analyze', methods=['POST'])

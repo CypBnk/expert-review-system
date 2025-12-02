@@ -505,7 +505,7 @@ class IMDbAnalyzer(PlatformAnalyzer):
             # Find review containers (IMDb structure as of 2024)
             review_containers = soup.find_all('div', class_='review-container')
             
-            for idx, container in enumerate(review_containers[:20]):
+            for idx, container in enumerate(review_containers[:1000]):
                 try:
                     # Extract text
                     text_elem = container.find('div', class_='text')
@@ -578,7 +578,7 @@ class SteamAnalyzer(PlatformAnalyzer):
                 'json': 1,
                 'filter': 'recent',
                 'language': 'english',
-                'num_per_page': 20
+                'num_per_page': 100
             }
             
             response = requests.get(api_url, params=params, timeout=10)
@@ -587,7 +587,7 @@ class SteamAnalyzer(PlatformAnalyzer):
             
             reviews = []
             if data.get('success') == 1 and 'reviews' in data:
-                for idx, review in enumerate(data['reviews'][:20]):
+                for idx, review in enumerate(data['reviews'][:1000]):
                     reviews.append({
                         'id': f"steam_{idx}",
                         'text': review.get('review', ''),
@@ -686,7 +686,7 @@ class MetacriticAnalyzer(PlatformAnalyzer):
             
             logger.info(f"Found {len(review_containers)} review containers")
             
-            for idx, container in enumerate(review_containers[:30]):  # Increased to 30 reviews
+            for idx, container in enumerate(review_containers[:1000]):  # Increased to 1000 reviews
                 try:
                     # Extract review text - try multiple selectors
                     text = None
@@ -890,7 +890,7 @@ class ExpertReviewAnalyst:
             # Score sentences by theme keyword density
             sentences_with_scores = []
             
-            for review in reviews[:30]:  # Limit to first 30 reviews
+            for review in reviews[:100]:  # Limit to first 100 reviews for summarization
                 text = review.get('text', '')
                 # Split into sentences (simple approach)
                 sentences = re.split(r'[.!?]+', text)

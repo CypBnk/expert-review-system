@@ -9,7 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_No changes yet._
+### Changed
+
+- **Expanded review extraction capacity**
+  - IMDb: 20 → 1000 reviews maximum
+  - Steam: 20 → 1000 reviews maximum (100 per API page)
+  - Metacritic: 30 → 1000 reviews maximum
+  - Summarization: 30 → 100 reviews for performance balance
+  - Enables richer analysis with larger datasets while maintaining spam filtering
 
 ## [2.2.0] - 2025-11-26
 
