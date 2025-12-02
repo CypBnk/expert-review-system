@@ -38,6 +38,13 @@ class Config:
     RATE_LIMIT_MAX = int(os.getenv('RATE_LIMIT_MAX', '100'))
     RATE_LIMIT_WINDOW = int(os.getenv('RATE_LIMIT_WINDOW', '60'))
     LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
+    # Hybrid AI (Ollama)
+    OLLAMA_ENABLED = os.getenv('OLLAMA_ENABLED', 'false').lower() == 'true'
+    OLLAMA_SMALL_URL = os.getenv('OLLAMA_SMALL_URL', 'http://ai-ollama-small:11435')
+    OLLAMA_LARGE_URL = os.getenv('OLLAMA_LARGE_URL', 'http://ai-ollama-large:11436')
+    OLLAMA_TIMEOUT = int(os.getenv('OLLAMA_TIMEOUT', '60'))
+    OLLAMA_SUMMARY_MODEL = os.getenv('OLLAMA_SUMMARY_MODEL', 'gemma3:1b')
+    OLLAMA_MODELS_DIR = os.getenv('OLLAMA_MODELS_DIR')
 
 # Configure logging
 logging.basicConfig(
@@ -152,6 +159,45 @@ class InputValidator:
                     return False, f"Invalid {platform} URL format"
         
         return True, None
+
+
+class OllamaClient:
+    """Minimal Ollama HTTP client for optional LLM summarization."""
+
+    def __init__(self, base_url: str, timeout: int = 60, model: Optional[str] = None):
+        self.base_url = base_url.rstrip('/')
+        self.timeout = timeout
+        self.model = model or Config.OLLAMA_SUMMARY_MODEL
+
+    def summarize(self, title: str, themes: List[Tuple[str, float]], reviews: List[Dict[str, Any]]) -> Optional[str]:
+        try:
+            top_themes = [t[0].replace('_', ' ') for t in themes[:5]]
+            # Limit prompt: sample a few short reviews to keep prompt small
+            samples: List[str] = []
+            for r in reviews[:6]:
+                txt = (r.get('text') or '').strip()
+                if len(txt) >= 20:
+                    samples.append(txt[:400])
+            prompt = (
+                f"You are an assistant that summarizes user reviews.\n"
+                f"Title: {title}\n"
+                f"Key themes: {', '.join(top_themes)}\n"
+                "Write a concise 3-4 sentence summary capturing sentiment and themes.\n"
+                "Avoid spoilers and marketing fluff.\n\n"
+                "Reviews:\n- " + "\n- ".join(samples)
+            )
+
+            payload = {"model": self.model, "prompt": prompt, "stream": False}
+            resp = requests.post(f"{self.base_url}/api/generate", json=payload, timeout=self.timeout)
+            if resp.status_code == 200:
+                data = resp.json()
+                text = data.get('response') or data.get('message') or ''
+                return text.strip() or None
+            logger.warning(f"Ollama summarize HTTP {resp.status_code}: {resp.text[:120]}")
+            return None
+        except Exception as e:
+            logger.warning(f"Ollama summarize failed: {e}")
+            return None
 
 
 class BERTSentimentAnalyzer:
@@ -783,6 +829,18 @@ class ExpertReviewAnalyst:
         self.sentiment_model = BERTSentimentAnalyzer()
         self.theme_extractor = ThemeExtractor()
         self.cross_media_matcher = CrossMediaMatcher(user_preferences)
+        # Optional Ollama client for hybrid summarization
+        self.ollama_client: Optional[OllamaClient] = None
+        if Config.OLLAMA_ENABLED:
+            try:
+                self.ollama_client = OllamaClient(
+                    base_url=Config.OLLAMA_SMALL_URL,
+                    timeout=Config.OLLAMA_TIMEOUT,
+                    model=Config.OLLAMA_SUMMARY_MODEL,
+                )
+                logger.info("Ollama client initialized for hybrid summarization")
+            except Exception as e:
+                logger.warning(f"Could not initialize Ollama client: {e}")
         
         logger.info("Expert Review Analyst initialized")
     
@@ -876,10 +934,19 @@ class ExpertReviewAnalyst:
         reviews: List[Dict[str, Any]],
         themes: List[Tuple[str, float]]
     ) -> str:
-        """Generate summary of reviews using extractive summarization"""
+        """Generate summary using extractive method or Ollama when enabled."""
         try:
             if not reviews:
                 return "No reviews available for analysis"
+            # Try LLM summarization first if enabled
+            if Config.OLLAMA_ENABLED and self.ollama_client is not None:
+                llm_summary = self.ollama_client.summarize(
+                    title="",
+                    themes=themes,
+                    reviews=reviews,
+                )
+                if llm_summary:
+                    return llm_summary
             
             # Extract key theme words
             theme_words = set()

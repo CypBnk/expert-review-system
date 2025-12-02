@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Hybrid AI (Ollama) scaffolding in backend
+  - New env vars: `OLLAMA_ENABLED`, `OLLAMA_SMALL_URL`, `OLLAMA_LARGE_URL`, `OLLAMA_TIMEOUT`, `OLLAMA_SUMMARY_MODEL`
+  - Optional Ollama client for LLM-based summarization with graceful fallback
+  - No behavior change unless `OLLAMA_ENABLED=true`
+
 ### Changed
 
 - **Expanded review extraction capacity**

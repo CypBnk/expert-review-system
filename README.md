@@ -397,6 +397,10 @@ Security is a priority. Please review our [Security Policy](SECURITY.md) for:
 
 ## 📊 Version History
 
+- **v2.2.1 (Unreleased additions)** – Hybrid AI prep
+  - Optional Ollama integration scaffolding (env vars and backend stubs)
+  - Use `OLLAMA_ENABLED=true` to try LLM summarization; falls back to extractive
+
 - **v2.2.1** (2025-12-02) - Expanded review extraction capacity to 1000 reviews per platform
 
 - **v2.2.0** (2025-11-26) - BERT sentiment, evaluation metadata, scoring & Docker stability

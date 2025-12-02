@@ -62,6 +62,13 @@ This file captures current open tasks to continue development toward a fully fea
 
 ---
 
+## Next Session: Hybrid AI (Ollama)
+
+- [ ] Add backend toggle for hybrid mode via `OLLAMA_ENABLED` (default false) with `OLLAMA_SMALL_URL`, `OLLAMA_LARGE_URL`, `OLLAMA_TIMEOUT` parsed in `Config` and exposed to the pipeline.
+- [ ] Parameterize Ollama models path using `OLLAMA_MODELS_DIR`; align docker-compose default and document in README.
+
+---
+
 **Last Updated:** 2025-11-26  
 **Status:** Backend complete; Frontend loading states implemented; Accessibility, testing, and documentation remaining  
 **Version:** 2.2.1
