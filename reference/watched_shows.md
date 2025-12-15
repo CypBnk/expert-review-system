@@ -1,0 +1,62 @@
+# Watched Shows (Tags)
+
+Simple reference of watched TV shows with 5+ genre/tone tags for preference DB seeding.
+
+- Mike Judge's Beavis and Butt-Head: comedy, animation, satire, adult-humor, gross-out, 90s-nostalgia
+- South Park: comedy, animation, satire, adult-humor, social-commentary, irreverent
+- PLUR1BUS: documentary-style, social-drama, coming-of-age, friendship, music-culture, niche
+- We Bare Bears: family, animation, slice-of-life, friendship, lighthearted, feel-good
+- Doom Patrol: superhero, sci-fi, dark-comedy, ensemble, surreal, character-driven
+- Invasion (2021): sci-fi, alien-invasion, thriller, ensemble, slow-burn, drama
+- Peacemaker: superhero, action-comedy, antihero, irreverent, ensemble, soundtrack-forward
+- Solar Opposites: comedy, animation, sci-fi, satire, adult-humor, fish-out-of-water
+- Ghosts (US): comedy, supernatural, ensemble, feel-good, lighthearted, sitcom
+- Lessons in Chemistry: period-drama, science, feminist, character-driven, romance, workplace
+- Evil: supernatural, procedural, horror, mystery, psychological, dark-humor
+- The Daily Show: satire, current-events, talk-show, comedy, interview, political
+- Rick and Morty: animation, sci-fi, dark-comedy, multiverse, satire, absurd
+- Rick and Morty: The Anime: animation, sci-fi, action, multiverse, surreal, anime-flavor
+- The Wheel of Time: epic-fantasy, adventure, magic, ensemble, prophecy, worldbuilding
+- The Handmaid's Tale: dystopia, drama, thriller, feminist, political, oppressive-regime
+- Murderbot: sci-fi, space-opera, android-protagonist, action, dry-humor, corporate-conspiracy
+- Clarkson's Farm: documentary, farming, reality, rural-life, humor, learning-curve
+- Harley Quinn: animation, superhero, dark-comedy, antihero, irreverent, ensemble
+- Yellowstone (2018): neo-western, family-drama, ranch-life, crime, power-struggle, thriller
+- Chronologically Lost: mystery, sci-fi, nonlinear, island, drama, fan-edit
+- The Legend of Korra: animation, fantasy, martial-arts, coming-of-age, adventure, politics
+- The Umbrella Academy: superhero, dysfunctional-family, dark-comedy, time-travel, ensemble, quirky
+- Parks and Recreation: comedy, workplace, mockumentary-style, small-town, feel-good, ensemble
+- Resident Alien: sci-fi, comedy-drama, fish-out-of-water, small-town, mystery, quirky
+- Foundation (2021): sci-fi, space-opera, empire, psychohistory, epic, adaptation
+- Star Trek: Strange New Worlds: sci-fi, space-exploration, adventure, ensemble, optimistic, episodic
+- Revival (2025): supernatural, horror, mystery, ensemble, thriller, eerie
+- Alien: Earth: sci-fi, alien-encounter, thriller, survival, ensemble, mystery
+- Haunted Hotel: supernatural, anthology, horror, mystery, paranormal, suspense
+- Ghosts (2019): comedy, supernatural, ensemble, British-humor, lighthearted, sitcom
+- 1923: western, period-drama, family-saga, frontier, gritty, historical
+- 1883: western, pioneer, survival, family-drama, frontier, historical
+- The Boys: superhero, dark-satire, ultra-violence, antihero, political, ensemble
+- House of the Dragon: fantasy, political-intrigue, dragons, family-drama, medieval, violence
+- The Great North: animation, family, sitcom, Alaska, wholesome, quirky
+- Dune: Prophecy: sci-fi, space-politics, mysticism, prequel, intrigue, ensemble
+- Star Trek: Discovery: sci-fi, space-exploration, serialized, ensemble, adventure, character-driven
+- Archer (2009): animation, spy-parody, comedy, adult-humor, ensemble, irreverent
+- Secret Level: documentary, gaming, nostalgia, mini-episodes, industry, commentary
+- Beacon 23: sci-fi, thriller, isolated-setting, mystery, psychological, space
+- True Detective: crime, noir, anthology, mystery, character-study, dark
+- Halo: sci-fi, military, action, alien-war, heroics, adaptation
+- Fallout: post-apocalyptic, sci-fi, dark-comedy, wasteland, adventure, retro-future
+- The Last of Us: post-apocalyptic, drama, survival, horror, character-driven, adaptation
+- Constellation: sci-fi, thriller, space, mystery, psychological, slow-burn
+- Silo: sci-fi, dystopia, mystery, claustrophobic, rebellion, slow-burn
+- Dark Matter (2015): sci-fi, space-opera, amnesia, ensemble, action, heist
+- Dark Matter (2024): sci-fi, multiverse, thriller, family, mind-bending, adaptation
+- Hammer and Bolter: animation, warhammer, anthology, grimdark, sci-fi-fantasy, action
+- Severance: sci-fi, corporate-satire, psychological, mystery, dark-comedy, dystopia
+- Avatar: The Last Airbender (2005): animation, fantasy, martial-arts, coming-of-age, adventure, elemental-bending
+- Avatar: The Last Airbender (2024): live-action, fantasy, martial-arts, coming-of-age, adaptation, adventure
+- Star Trek: Lower Decks: animation, sci-fi, comedy, ensemble, starship-life, meta
+- Star Wars: The Bad Batch: animation, sci-fi, clone-squad, action, adventure, rebellion
+- Our Flag Means Death: comedy, pirate, romance, queer, ensemble, period
+- The Boys (Season 4 ref): superhero, satire, violence, media-critique, ensemble, dark-comedy
+- The Great North (duplicate check): animation, family, wholesome, Alaska, slice-of-life, quirky

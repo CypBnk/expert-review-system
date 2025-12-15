@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - New env vars: `OLLAMA_ENABLED`, `OLLAMA_SMALL_URL`, `OLLAMA_LARGE_URL`, `OLLAMA_TIMEOUT`, `OLLAMA_SUMMARY_MODEL`
   - Optional Ollama client for LLM-based summarization with graceful fallback
   - No behavior change unless `OLLAMA_ENABLED=true`
+- Reference data for watched shows and tags
+  - Added watched show tag list for preference seeding (reference/watched_shows.md)
+  - Added tag frequency summary for the watched show list (reference/tag_frequencies.md)
+  - Added TV genre tag reference for watched shows (reference/tv_genre_tags.md)
 
 ### Changed
 

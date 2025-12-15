@@ -162,6 +162,8 @@ docker-compose logs -f
 - **[Self-Hosted Deployment Guide](self-hosted/README.md)** - Complete setup for local development
 - **[Docker Deployment Guide](containerized/README.md)** - Production containerized deployment
 - **[Quick Start Guide](QUICKSTART.md)** - Get up and running in 5 minutes
+- **Reference: Watched show tags** - See [reference/watched_shows.md](reference/watched_shows.md) and [reference/tv_genre_tags.md](reference/tv_genre_tags.md)
+- **Reference: Tag frequencies** - See [reference/tag_frequencies.md](reference/tag_frequencies.md)
 
 ### For Developers
 
@@ -398,6 +400,7 @@ Security is a priority. Please review our [Security Policy](SECURITY.md) for:
 ## 📊 Version History
 
 - **v2.2.1 (Unreleased additions)** – Hybrid AI prep
+
   - Optional Ollama integration scaffolding (env vars and backend stubs)
   - Use `OLLAMA_ENABLED=true` to try LLM summarization; falls back to extractive
 
