@@ -164,6 +164,7 @@ docker-compose logs -f
 - **[Quick Start Guide](QUICKSTART.md)** - Get up and running in 5 minutes
 - **Reference: Watched show tags** - See [reference/watched_shows.md](reference/watched_shows.md) and [reference/tv_genre_tags.md](reference/tv_genre_tags.md)
 - **Reference: Tag frequencies** - See [reference/tag_frequencies.md](reference/tag_frequencies.md)
+- **Reference: Movie exports** - See [reference/movies_unique.md](reference/movies_unique.md) and [reference/movie_duplicates.md](reference/movie_duplicates.md)
 
 ### For Developers
 

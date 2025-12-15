@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added watched show tag list for preference seeding (reference/watched_shows.md)
   - Added tag frequency summary for the watched show list (reference/tag_frequencies.md)
   - Added TV genre tag reference for watched shows (reference/tv_genre_tags.md)
+- Reference data for movie exports
+  - Added unique movie list for export/reference (reference/movies_unique.md)
+  - Added duplicate title summary for the export (reference/movie_duplicates.md)
 
 ### Changed
 
