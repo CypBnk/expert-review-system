@@ -45,6 +45,14 @@ class Config:
     OLLAMA_TIMEOUT = int(os.getenv('OLLAMA_TIMEOUT', '60'))
     OLLAMA_SUMMARY_MODEL = os.getenv('OLLAMA_SUMMARY_MODEL', 'gemma3:1b')
     OLLAMA_MODELS_DIR = os.getenv('OLLAMA_MODELS_DIR')
+    
+    # Shared User Agents
+    USER_AGENTS = [
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'
+    ]
 
 # Configure logging
 logging.basicConfig(
@@ -521,12 +529,9 @@ class PlatformAnalyzer:
 class IMDbAnalyzer(PlatformAnalyzer):
     """Extract reviews from IMDb"""
     
-    USER_AGENTS = [
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'
-    ]
-    
+    def __init__(self, rate_limiter: RateLimiter):
+        super().__init__(rate_limiter)
+        
     def extract_reviews(self, url: str) -> List[Dict[str, Any]]:
         """Extract reviews from IMDb with rate limiting"""
         try:
@@ -541,7 +546,7 @@ class IMDbAnalyzer(PlatformAnalyzer):
             if '/reviews' not in url:
                 url = url.rstrip('/') + '/reviews'
             
-            headers = {'User-Agent': random.choice(self.USER_AGENTS)}
+            headers = {'User-Agent': random.choice(Config.USER_AGENTS)}
             response = requests.get(url, headers=headers, timeout=10)
             response.raise_for_status()
             
@@ -671,12 +676,6 @@ class MetacriticAnalyzer(PlatformAnalyzer):
     - Author: span.c-siteReview_username or div.name
     """
     
-    USER_AGENTS = [
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0'
-    ]
-    
     def extract_reviews(self, url: str) -> List[Dict[str, Any]]:
         """Extract user reviews from Metacritic
         
@@ -705,7 +704,7 @@ class MetacriticAnalyzer(PlatformAnalyzer):
                 url += '&platform=pc' if '?' in url else '?platform=pc'
             
             headers = {
-                'User-Agent': random.choice(self.USER_AGENTS),
+                'User-Agent': random.choice(Config.USER_AGENTS),
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
                 'Accept-Language': 'en-US,en;q=0.5',
                 'DNT': '1',
